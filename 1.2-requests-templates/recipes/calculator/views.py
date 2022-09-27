@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 
 DATA = {
     'omlet': {
@@ -18,6 +18,19 @@ DATA = {
     },
     # можете добавить свои рецепты ;)
 }
+
+
+def calculator(request, dish):
+    quantity = int(request.GET.get('servings', 1))
+    dish = DATA.get(dish)
+    context = context = {
+            'recipe': {}
+        }
+    if dish:
+        for item, item_quantity in dish.items():
+            context['recipe'][item] = round(item_quantity * quantity, 1)
+    return render(request, 'calculator/index.html', context)
+
 
 # Напишите ваш обработчик. Используйте DATA как источник данных
 # Результат - render(request, 'calculator/index.html', context)
