@@ -1,11 +1,12 @@
 from django.db import models
-import psycopg2
+from autoslug import AutoSlugField
 
 
 class Phone(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     price = models.IntegerField()
-    image = models.CharField(max_length=1000)
+    image = models.ImageField()
     release_date = models.DateField()
-    lte_exists = models.BooleanField()
-    slug = models.SlugField(name)
+    lte_exists = models.BooleanField(default=False)
+    slug = AutoSlugField(populate_from='name')
