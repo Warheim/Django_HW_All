@@ -9,14 +9,12 @@
         </div>
         <div class="row">
             <div class="book col-md-4">
-                <h2>Сияние</h2>
-                <p>Автор: Стивен Кинг</p>
-                <p>Дата публикации: 2018-09-10</p>
-            </div>
-            <div class="book col-md-4">
-                <h2>1984</h2>
-                <p>Автор: Джордж Оруэл</p>
-                <p>Дата публикации: 2015-03-11</p>
+                {%  for book in books %}
+                    <h2>{{ book.name }}</h2>
+                    <p>{{ book.author }}</p>
+                    <p>{{ book.pub_date }}</p>
+                    &nbsp
+                {% endfor %}
             </div>
         </div>
     </div>
