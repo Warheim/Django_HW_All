@@ -12,14 +12,13 @@ def books_view(request):
 
 
 def books_for_date(request, pub_date):
-    try:
-        books = Book.objects.filter(pub_date=pub_date)
-        if books:
-            template = 'books/books_list.html'
-            context = {'books': books}
-            return render(request, template, context)
-        else:
-            return HttpResponse('<h3>No books for such a date</h3>')
-    except ValidationError:
-        return HttpResponse(
-            f'<h3>"{pub_date}" is incorrect format for date. Please type date in YYYY-MM-DD format.</h3>')
+    template = 'books/books_list.html'
+    books_obj = Book.objects.filter(pub_date=pub_date)
+    books_next = Book.objects.filter(pub_date__gt=pub_date).order_by('pub_date').first()
+    books_previous = Book.objects.filter(pub_date__lt=pub_date).order_by('-pub_date').first()
+    context = {
+        'books': books_obj,
+        'next_book': books_next,
+        'prev_book': books_previous,
+    }
+    return render(request, context, template)
