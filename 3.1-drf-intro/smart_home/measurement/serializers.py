@@ -16,13 +16,9 @@ class MeasurementSerializer(serializers.ModelSerializer):
         fields = ['temperature', 'created_at', 'measurements']
 
 
-def testsens():
-    queryset = Sensor.objects.all()
-    ser = SensorSerializer(queryset, many=True)
-    return ser.data
+class OneSensorSerializer(serializers.ModelSerializer):
+    measurements = MeasurementSerializer(many=True, read_only=True)
 
-
-def testmeas():
-    queryset = Measurement.objects.all()
-    ser = MeasurementSerializer(queryset, many=True)
-    return ser.data
+    class Meta:
+        model = Sensor
+        fields = ['id', 'name', 'description', 'measurements']
