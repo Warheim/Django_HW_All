@@ -1,7 +1,5 @@
 from rest_framework import serializers
 from .models import Product, Stock, StockProduct
-from collections import OrderedDict
-import json
 
 
 class ProductSerializer(serializers.ModelSerializer):
