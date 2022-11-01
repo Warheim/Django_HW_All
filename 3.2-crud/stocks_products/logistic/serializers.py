@@ -42,3 +42,4 @@ class StockSerializer(serializers.ModelSerializer):
             price = position['price']
             StockProduct.objects.filter(stock_id=stock.id, product_id=product).update(quantity=quantity, price=price)
         return stock
+
