@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Product, Stock, StockProduct
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -26,20 +27,19 @@ class StockSerializer(serializers.ModelSerializer):
         stock = super().create(validated_data)
         for position in positions:
             position = dict(position)
-            product = Product.objects.get(title=position['product']).id
+            product = Product.objects.get(title=position['product'])
             quantity = position['quantity']
             price = position['price']
-            StockProduct.objects.create(stock_id=stock.id, product_id=product, quantity=quantity, price=price)
+            StockProduct.objects.create(stock_id=stock.id,
+                                        product_id=product,
+                                        quantity=quantity,
+                                        price=price)
         return stock
 
     def update(self, instance, validated_data):
         positions = validated_data.pop('positions')
         stock = super().update(instance, validated_data)
         for position in positions:
-            position = dict(position)
-            product = Product.objects.get(title=position['product']).id
-            quantity = position['quantity']
-            price = position['price']
-            StockProduct.objects.filter(stock_id=stock.id, product_id=product).update(quantity=quantity, price=price)
+            product = position.pop('product')
+            StockProduct.objects.update_or_create(product=product, stock=stock, defaults=position)
         return stock
-
