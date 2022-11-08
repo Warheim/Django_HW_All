@@ -31,7 +31,7 @@ class StockSerializer(serializers.ModelSerializer):
             quantity = position['quantity']
             price = position['price']
             StockProduct.objects.create(stock_id=stock.id,
-                                        product_id=product,
+                                        product_id=product.id,
                                         quantity=quantity,
                                         price=price)
         return stock
