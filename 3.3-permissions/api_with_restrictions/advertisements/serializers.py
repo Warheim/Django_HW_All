@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
+from django.http import HttpResponse
 
 from advertisements.models import Advertisement
 
@@ -23,7 +25,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertisement
         fields = ('id', 'title', 'description', 'creator',
-                  'status', 'created_at', )
+                  'status', 'created_at',)
 
     def create(self, validated_data):
         """Метод для создания"""
@@ -39,4 +41,10 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """Метод для валидации. Вызывается при создании и обновлении."""
+        active_user_id = self.context['request'].user.id
+        if not active_user_id:
+            raise ValidationError("You must sign in to post an advertisement")
+        active_user_open_ads = Advertisement.objects.filter(creator_id=active_user_id, status='OPEN')
+        if len(active_user_open_ads) >= 10:
+            raise ValidationError("You can't have more than 10 opened advertisements")
         return data
