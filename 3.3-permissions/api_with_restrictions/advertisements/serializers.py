@@ -1,3 +1,4 @@
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
@@ -45,6 +46,10 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         if not active_user_id:
             raise ValidationError("You must sign in to post an advertisement")
         active_user_open_ads = Advertisement.objects.filter(creator_id=active_user_id, status='OPEN')
-        if len(active_user_open_ads) >= 10:
+        if self.context['request'].method == 'POST' and active_user_open_ads.count() >= 10:
+            raise ValidationError("You can't have more than 10 opened advertisements")
+        elif self.context['request'].method == 'PATCH' and \
+                active_user_open_ads.count() >= 10 and data['status'] == 'OPEN':
             raise ValidationError("You can't have more than 10 opened advertisements")
         return data
+
