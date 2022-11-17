@@ -46,3 +46,16 @@ def test_len_list(client, course_factory):
     data = response.json()
     assert isinstance(data, list)
     assert len(data) == 5
+
+
+@pytest.mark.django_db
+def test_course_filter(client, course_factory):
+    some_courses = course_factory(_quantity=5)
+
+    response = client.get('/api/v1/courses/')
+
+    assert response.status_code == 200
+    data = response.json()
+    print(data)
+    assert len(data) == 1
+
