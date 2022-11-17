@@ -44,4 +44,5 @@ def test_len_list(client, course_factory):
 
     assert response.status_code == 200
     data = response.json()
+    assert isinstance(data, list)
     assert len(data) == 5
