@@ -103,3 +103,13 @@ def test_course_update(client, course_factory, address):
     assert data['id'] == one_course[0].id
     assert data['name'] == new_course_name
 
+
+@pytest.mark.django_db
+def test_course_delete(client, course_factory, address):
+    one_course = course_factory(_quantity=1)
+
+    response = client.delete(f'{address}{one_course[0].id}/', data={'id': str(one_course[0].id)})
+
+    assert response.status_code == 204
+
+
