@@ -34,7 +34,7 @@ def course_factory():
 def test_one_course(client, course_factory, address):
     one_course = course_factory(_quantity=1)
 
-    response = client.get(address)
+    response = client.get(address, {'id': str(one_course[0].id)})
 
     assert response.status_code == 200
     data = response.json()
