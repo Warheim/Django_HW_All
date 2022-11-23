@@ -46,13 +46,11 @@ def test_one_course(client, course_factory, address):
 @pytest.mark.django_db
 def test_some_courses(client, course_factory, address):
     some_courses = course_factory(_quantity=5)
-    print(some_courses)
 
     response = client.get(address)
 
     assert response.status_code == 200
     data = response.json()
-    print(data)
     assert len(data) == len(some_courses)
     for num, course in enumerate(data):
         assert course['id'] == some_courses[num].id
