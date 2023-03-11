@@ -57,8 +57,8 @@ DATABASES = {
         'NAME': 'netology_models_list',
         'HOST': '127.0.0.1',
         'PORT': '5432',
-        'USER': 'postgres',
-        'PASSWORD': '120290Vova'
+        'USER': 'warheim',
+        'PASSWORD': '120290'
     }
 }
 
@@ -121,3 +121,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

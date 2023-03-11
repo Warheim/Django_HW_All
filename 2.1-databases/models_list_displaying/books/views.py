@@ -1,24 +1,28 @@
-from django.core.exceptions import ValidationError
-from django.shortcuts import render
-from .models import Book
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from books.models import Book
+
+
+def index(request):
+    return redirect('books')
 
 
 def books_view(request):
     books = Book.objects.all().order_by('pub_date')
     template = 'books/books_list.html'
-    context = {'books': books}
+    context = {
+        'books': books,
+    }
     return render(request, template, context)
 
 
 def books_for_date(request, pub_date):
-    template = 'books/books_list.html'
-    books_obj = Book.objects.filter(pub_date=pub_date)
-    books_next = Book.objects.filter(pub_date__gt=pub_date).order_by('pub_date').first()
-    books_previous = Book.objects.filter(pub_date__lt=pub_date).order_by('-pub_date').first()
+    book = Book.objects.filter(pub_date=pub_date).first()
+    next_book = Book.objects.filter(pub_date__gt=pub_date).order_by('pub_date').first()
+    prev_book = Book.objects.filter(pub_date__lt=pub_date).order_by('-pub_date').first()
+    template = 'books/books_date.html'
     context = {
-        'books': books_obj,
-        'next_book': books_next,
-        'prev_book': books_previous,
+        'book': book,
+        'next_book': next_book,
+        'prev_book': prev_book,
     }
-    return render(request, context, template)
+    return render(request, template, context)

@@ -5,28 +5,19 @@
 {% block content %}
     <div class="container">
         <div class="header">
-            <h1><a href="/books">Каталог</a></h1>
+            <h1><a href="{% url 'books' %}">Каталог</a></h1>
         </div>
         <div class="row">
-            {%  for book in books %}
+            {% for book in books %}
             <div class="book col-md-4">
+                <a href="{% url 'datebooks' book.pub_date %}">
                     <h2>{{ book.name }}</h2>
-                    <p>{{ book.author }}</p>
-                    <p>{{ book.pub_date }}</p>
-                    &nbsp
+                </a>
+                <p>{{ book.author }}</p>
+                <p>{{ book.pub_date }}</p>
+                &nbsp;
             </div>
             {% endfor %}
         </div>
-        {% if prev_book %}
-            <h2>{{ book.name }}</h2>
-            <p>{{ book.author }}</p>
-            <p>{{ book.pub_date }}</p>
-        {% endif %}
-        &nbsp
-        {% if next_book %}
-            <h2>{{ book.name }}</h2>
-            <p>{{ book.author }}</p>
-            <p>{{ book.pub_date }}</p>
-        {% endif %}
     </div>
 {% endblock %}
